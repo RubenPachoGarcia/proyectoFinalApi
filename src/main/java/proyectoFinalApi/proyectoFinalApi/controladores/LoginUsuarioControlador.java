@@ -17,7 +17,7 @@ public class LoginUsuarioControlador {
     @Autowired
     private UsuarioServicio usuarioServicio;
 
-    @PostMapping("/validarUsuario")
+    @PostMapping("/usuario")
     public ResponseEntity<String> autenticarUsuario(@RequestBody LoginUsuarioDto usuarioDto) {
         try {
             System.out.println("Correo: " + usuarioDto.getCorreoUsuario());
