@@ -1,21 +1,41 @@
 package proyectoFinalApi.proyectoFinalApi.servicios;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import proyectoFinalApi.proyectoFinalApi.daos.UsuarioDao;
 import proyectoFinalApi.proyectoFinalApi.dtos.RegistroUsuarioDto;
 import proyectoFinalApi.proyectoFinalApi.repositorios.UsuarioRepositorio;
 
 @Service
 public class UsuarioServicio {
+	
+	// Simula el almacenamiento de tokens
+	private Map<String, String> tokens = new HashMap<>(); 
 
+    public UsuarioServicio(UsuarioRepositorio usuarioRepositorio) {
+        this.usuarioRepositorio = usuarioRepositorio;
+    }
+    
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
 
     @Autowired
     private PasswordEncoder encriptacion;
+    
+    @Autowired
+    private JavaMailSender mailSender;
 
     public ResponseEntity<String> validarDatos(String correoUsuario, String contraseniaUsuario) {
         UsuarioDao usuarioDao = usuarioRepositorio.findByCorreoUsuario(correoUsuario);
@@ -51,4 +71,97 @@ public class UsuarioServicio {
 
         usuarioRepositorio.save(usuarioDao);
     }
+    
+    public boolean enviarCorreoRecuperacion(String correoUsuario) {
+        // Verificamos si el usuario existe
+        if (!usuarioRepositorio.existsByCorreoUsuario(correoUsuario)) {
+            System.err.println("Error: No se encontró el correo en la base de datos.");
+            return false;
+        }
+
+        // Generamos el token y se almacena
+        String token = UUID.randomUUID().toString();
+        tokens.put(token, correoUsuario);
+
+        // Construimos la URL de recuperación de correo
+        String urlCorreoRecuperacion = "http://localhost:1180/proyectoFinalFront/recuperarContrasenia.jsp?token=" + token;
+
+        // Mensaje del correo
+        String mensaje = "<p>Haga clic en el siguiente enlace para cambiar su contraseña en MuletaYMontera:</p>"
+                       + "<p><a href= '" + urlCorreoRecuperacion + "'>Restablecer contraseña</a></p>"
+                       + "<p>Si no solicitó este cambio, ignore este mensaje.</p>";
+
+        // Enviamos el correo 
+        try {
+            enviarCorreo(correoUsuario, "Restablecer contraseña", mensaje);
+            System.out.println("Correo de recuperación enviado a: " + correoUsuario);
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error al enviar el correo: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    public boolean cambiarContrasenia(String token, String nuevaContraseniaUsuario) {
+        if (tokens.containsKey(token)) {
+            String correoUsuario = tokens.get(token);
+            //Encripta la nueva contraseña antes de guardarla en la bbdd
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String contraseniaEncriptada = passwordEncoder.encode(nuevaContraseniaUsuario);
+            //Guarda la contraseña encriptada en la bbdd
+            usuarioRepositorio.actualizarContrasenia(correoUsuario, contraseniaEncriptada);
+            //Elimina el token después de usarlo
+            tokens.remove(token);
+            return true;
+        }
+        return false;
+    }
+
+    private void enviarCorreo(String correoDestinatario, String correoAsunto, String correoCuerpo) {
+        // Verificar que el correo destinatario no sea nulo o vacío
+        if (correoDestinatario == null || correoDestinatario.isEmpty()) {
+            System.err.println("Error: El correo destinatario es nulo o vacío.");
+            return;
+        }
+
+        // Verificar que el asunto y cuerpo no sean nulos o vacíos
+        if (correoAsunto == null || correoAsunto.isEmpty()) {
+            System.err.println("Error: El asunto del correo es nulo o vacío.");
+            return;
+        }
+
+        if (correoCuerpo == null || correoCuerpo.isEmpty()) {
+            System.err.println("Error: El cuerpo del correo es nulo o vacío.");
+            return;
+        }
+
+        // Verificar que mailSender no sea null
+        if (mailSender == null) {
+            System.err.println("Error: El mailSender no está configurado correctamente.");
+            return;
+        }
+
+        try {
+            MimeMessage mensaje = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mensaje, true);
+            helper.setTo(correoDestinatario);
+            helper.setSubject(correoAsunto);
+            helper.setText(correoCuerpo, true); // true indica que el cuerpo es HTML
+
+            // Enviar el correo
+            mailSender.send(mensaje);
+            System.out.println("Correo enviado correctamente a " + correoDestinatario);
+        } catch (MessagingException e) {
+            // Mejor manejo de la excepción con más información
+            System.err.println("Error al enviar el correo: " + e.getMessage());
+            e.printStackTrace(); // Imprime la traza completa para depurar
+        }
+    }
 }
+
+/*Aquí se implementa el envío de correo con una biblioteca como JavaMail
+System.out.println("Enviando correo a: " + correoDestinatario);
+System.out.println("Asunto: " + correoAsunto);
+System.out.println("Cuerpo: " + correoCuerpo);*/
