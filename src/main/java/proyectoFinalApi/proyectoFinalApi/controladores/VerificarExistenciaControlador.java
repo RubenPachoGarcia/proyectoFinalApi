@@ -1,41 +1,47 @@
 package proyectoFinalApi.proyectoFinalApi.controladores;
 
-import java.io.IOException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import proyectoFinalApi.proyectoFinalApi.dtos.VerificarExistenciaDto;
 import proyectoFinalApi.proyectoFinalApi.servicios.UsuarioServicio;
 
-public class VerificarExistenciaControlador extends HttpServlet {
+//Permite hacer peticiones desde el frontend
+@CrossOrigin(origins = "http://localhost:1180")
+@RestController
+@RequestMapping("/api/verificar")
+public class VerificarExistenciaControlador {
 
-	private UsuarioServicio usuarioServicio;
+    @Autowired
+    private UsuarioServicio usuarioServicio;
 
-	@Override
-	public void init() {
-		this.usuarioServicio = new UsuarioServicio();
-	}
+    @PostMapping("/correo")
+    public ResponseEntity<Map<String, Boolean>> verificarCorreo(@RequestBody VerificarExistenciaDto dto) {
+        try {
+            boolean correoExiste = usuarioServicio.verificarCorreoExistente(dto.getCorreoUsuario());
+            Map<String, Boolean> response = new HashMap<>();
+            response.put("existe", correoExiste);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", true));
+        }
+    }
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		// Leer datos JSON del body de la petición
-		ObjectMapper mapper = new ObjectMapper();
-		VerificarExistenciaDto dto = mapper.readValue(request.getReader(), VerificarExistenciaDto.class);
-
-		// Verificar correo y teléfono
-		boolean correoExiste = usuarioServicio.verificarCorreoExistente(dto.getCorreoUsuario());
-		boolean telefonoExiste = usuarioServicio.verificarTelefonoExistente(dto.getTelefonoUsuario());
-
-		// Crear respuesta
-		if (correoExiste || telefonoExiste) {
-			response.setStatus(HttpServletResponse.SC_OK);
-			// Existe uno como minimo
-			response.getWriter().write("{ \"existe\": true }");
-		} else {
-			response.setStatus(HttpServletResponse.SC_OK);
-			// Ninguno existe
-			response.getWriter().write("{ \"existe\": false }");
-		}
-	}
+    @PostMapping("/telefono")
+    public ResponseEntity<Map<String, Boolean>> verificarTelefono(@RequestBody VerificarExistenciaDto dto) {
+        try {
+            boolean telefonoExiste = usuarioServicio.verificarTelefonoExistente(dto.getTelefonoUsuario());
+            Map<String, Boolean> response = new HashMap<>();
+            response.put("existe", telefonoExiste);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", true));
+        }
+    }
 }

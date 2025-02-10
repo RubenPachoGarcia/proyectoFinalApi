@@ -194,7 +194,7 @@ public class UsuarioServicio {
 		boolean correoExistente = false;
         
 		try (Connection con = DBConexion.getConnection()) {
-            String consultaCorreoExistente = "SELECT COUNT(*) FROM usuarios WHERE correo_usuario = ?";
+            String consultaCorreoExistente = "SELECT COUNT(*) FROM proyecto.usuarios WHERE correo_usuario = ?";
             
             try (PreparedStatement stmt = con.prepareStatement(consultaCorreoExistente)) {
                 stmt.setString(1, correoUsuario);
@@ -217,7 +217,7 @@ public class UsuarioServicio {
     	boolean telefonoExistente = false;
         
     	try (Connection con = DBConexion.getConnection()) {
-            String consultaTelefonoExistente = "SELECT COUNT(*) FROM usuarios WHERE telefono_usuario = ?";
+            String consultaTelefonoExistente = "SELECT COUNT(*) FROM proyecto.usuarios WHERE telefono_usuario = ?";
             
             try (PreparedStatement stmt = con.prepareStatement(consultaTelefonoExistente)) {
                 stmt.setString(1, telefonoUsuario);
