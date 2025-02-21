@@ -59,7 +59,7 @@ public class UsuarioDao {
     	
     }
     
-    //Getters & Setters
+    //Getters y Setters
 	
 	public long getIdUsuario() {
 		return idUsuario;

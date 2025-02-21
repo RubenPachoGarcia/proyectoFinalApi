@@ -2,26 +2,42 @@ package proyectoFinalApi.proyectoFinalApi.seguridad;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
-/**
- * Clase de configuración para la seguridad de la aplicación.
- * <p>
- * En esta clase se define el comportamiento para la codificación y verificación de contraseñas en la aplicación
- * utilizando el algoritmo de hash BCrypt, proporcionado por Spring Security.
- * </p>
- */
 @Configuration
+@EnableWebSecurity  // Activa la seguridad web para la aplicación
 public class SeguridadConfig {
 
     /**
      * Método para encriptar las contraseñas.
-     * El PasswordEncoder se utiliza para encriptar contraseñas de forma segura antes de que llegen a la bbdd.
      */
     @Bean
     public PasswordEncoder encriptacion() {
-        // Se devuelve una instancia que proporcionará una contraseña encriptada
         return new BCryptPasswordEncoder();
+    }
+
+    /**
+     * Configuración de seguridad para la aplicación.
+     */
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // Configuración de seguridad
+        http
+            .csrf().disable()  // Desactiva CSRF (si lo necesitas puedes mantenerlo)
+            .authorizeRequests()
+                .requestMatchers("/api/**").permitAll() // Permite el acceso sin autenticación a las rutas /api/**
+                .anyRequest().authenticated() // Requiere autenticación para todas las demás rutas
+            .and()
+            .formLogin()
+                .permitAll() // Permite el formulario de login
+            .and()
+            .logout()
+                .permitAll(); // Permite hacer logout
+
+        return http.build(); // Devuelve la configuración de seguridad
     }
 }

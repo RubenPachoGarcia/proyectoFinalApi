@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,6 +15,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import proyectoFinalApi.proyectoFinalApi.daos.UsuarioDao;
@@ -233,6 +235,10 @@ public class UsuarioServicio {
             e.printStackTrace();
         }
         return telefonoExistente;
+    }
+    
+    public UsuarioDao obtenerUsuarioPorCorreo(String correoUsuario) {
+        return usuarioRepositorio.findByCorreoUsuario(correoUsuario);
     }
 }
 

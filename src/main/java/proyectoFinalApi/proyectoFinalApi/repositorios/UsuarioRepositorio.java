@@ -5,11 +5,12 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 import proyectoFinalApi.proyectoFinalApi.daos.UsuarioDao;
 
 @Repository
 public interface UsuarioRepositorio extends JpaRepository<UsuarioDao, Long> {
-
+	
     /**
      * Busca al usuario por su correo.
      */

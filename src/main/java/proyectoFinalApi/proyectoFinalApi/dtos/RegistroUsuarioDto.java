@@ -5,6 +5,7 @@ package proyectoFinalApi.proyectoFinalApi.dtos;
  */
 public class RegistroUsuarioDto {
     
+	//Atributos
 	private long idUsuario;
     private String nombreCompletoUsuario;
     private String correoUsuario;
@@ -16,7 +17,6 @@ public class RegistroUsuarioDto {
     private String esAdmin;
 
     // Getters y Setters
-    
     public long getIdUsuario() {
         return idUsuario;
     }
