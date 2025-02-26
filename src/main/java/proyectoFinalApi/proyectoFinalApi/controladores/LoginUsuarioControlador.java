@@ -3,9 +3,11 @@ package proyectoFinalApi.proyectoFinalApi.controladores;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpSession;
 import proyectoFinalApi.proyectoFinalApi.daos.UsuarioDao;
@@ -18,7 +20,7 @@ public class LoginUsuarioControlador {
 
     @Autowired
     private UsuarioServicio usuarioServicio;
-
+   
     @PostMapping("/usuario")
     public ResponseEntity<String> autenticarUsuario(@RequestBody LoginUsuarioDto usuarioDto, HttpSession session) {
         try {
@@ -57,6 +59,23 @@ public class LoginUsuarioControlador {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor.");
+        }
+    }
+    
+ // Endpoint para obtener el id del usuario dado correo y contraseña
+    @GetMapping("/id")
+    public ResponseEntity<String> obtenerIdUsuario(@RequestParam("correoUsuario") String correoUsuario,
+                                                    @RequestParam("contraseniaUsuario") String contraseniaUsuario) {
+        try {
+            UsuarioDao usuario = usuarioServicio.obtenerUsuarioPorCorreo(correoUsuario);
+            if (usuario != null) {
+                return ResponseEntity.ok(String.valueOf(usuario.getIdUsuario()));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("0");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
         }
     }
 

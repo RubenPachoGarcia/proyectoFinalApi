@@ -37,8 +37,8 @@ public class UsuarioServicio {
 	private UsuarioRepositorio usuarioRepositorio;
 
 	@Autowired
-	private PasswordEncoder encriptacion;
-
+	private final PasswordEncoder passwordEncoder;
+	
 	@Autowired
 	private JavaMailSender mailSender;
 
@@ -66,11 +66,12 @@ public class UsuarioServicio {
 		}
 
 		UsuarioDao usuarioDao = new UsuarioDao();
+		
 		usuarioDao.setNombreCompletoUsuario(usuarioDto.getNombreCompletoUsuario());
 		usuarioDao.setCorreoUsuario(usuarioDto.getCorreoUsuario());
 		usuarioDao.setTelefonoUsuario(usuarioDto.getTelefonoUsuario());
 		usuarioDao.setFotoUsuario(usuarioDto.getFotoUsuario());
-		usuarioDao.setContraseniaUsuario(encriptacion.encode(usuarioDto.getContraseniaUsuario()));
+		usuarioDao.setContraseniaUsuario(usuarioDto.getContraseniaUsuario());
 		usuarioDao.setEsAdmin("false");
 		usuarioDao.setEsPremium("false");
 
@@ -93,7 +94,7 @@ public class UsuarioServicio {
 	        enviarCorreo(correoUsuario, asunto, mensaje);
 	        System.out.println("Correo de confirmación enviado a: " + correoUsuario);
 	    } catch (Exception e) {
-	        System.err.println("Error al enviar el correo de confirmación: " + e.getMessage());
+	        System.out.println("Error al enviar el correo de confirmación: " + e.getMessage());
 	        e.printStackTrace();
 	    }
 	}
@@ -101,7 +102,7 @@ public class UsuarioServicio {
 	public boolean enviarCorreoRecuperacion(String correoUsuario) {
 		// Verificamos si el usuario existe
 		if (!usuarioRepositorio.existsByCorreoUsuario(correoUsuario)) {
-			System.err.println("Error: No se encontró el correo en la base de datos.");
+			System.out.println("Error: No se encontró el correo en la base de datos.");
 			return false;
 		}
 
@@ -124,7 +125,7 @@ public class UsuarioServicio {
 			System.out.println("Correo de recuperación enviado a: " + correoUsuario);
 			return true;
 		} catch (Exception e) {
-			System.err.println("Error al enviar el correo: " + e.getMessage());
+			System.out.println("Error al enviar el correo: " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
@@ -148,24 +149,24 @@ public class UsuarioServicio {
 	private void enviarCorreo(String correoDestinatario, String correoAsunto, String correoCuerpo) {
 		// Verificar que el correo destinatario no sea nulo o vacío
 		if (correoDestinatario == null || correoDestinatario.isEmpty()) {
-			System.err.println("Error: El correo destinatario es nulo o vacío.");
+			System.out.println("Error: El correo destinatario es nulo o vacío.");
 			return;
 		}
 
 		// Verificar que el asunto y cuerpo no sean nulos o vacíos
 		if (correoAsunto == null || correoAsunto.isEmpty()) {
-			System.err.println("Error: El asunto del correo es nulo o vacío.");
+			System.out.println("Error: El asunto del correo es nulo o vacío.");
 			return;
 		}
 
 		if (correoCuerpo == null || correoCuerpo.isEmpty()) {
-			System.err.println("Error: El cuerpo del correo es nulo o vacío.");
+			System.out.println("Error: El cuerpo del correo es nulo o vacío.");
 			return;
 		}
 
 		// Verificar que mailSender no sea null
 		if (mailSender == null) {
-			System.err.println("Error: El mailSender no está configurado correctamente.");
+			System.out.println("Error: El mailSender no está configurado correctamente.");
 			return;
 		}
 
@@ -182,14 +183,11 @@ public class UsuarioServicio {
 			System.out.println("Correo enviado correctamente a " + correoDestinatario);
 		} catch (MessagingException e) {
 			// Manejo de la excepción para que de mas detalles sobre los errores
-			System.err.println("Error al enviar el correo: " + e.getMessage());
+			System.out.println("Error al enviar el correo: " + e.getMessage());
 			// Imprime la traza completa para depurar
 			e.printStackTrace();
 		}
 	}
-	
-	public UsuarioServicio() {
-    }
 	
 	public boolean verificarCorreoExistente(String correoUsuario) {
        
