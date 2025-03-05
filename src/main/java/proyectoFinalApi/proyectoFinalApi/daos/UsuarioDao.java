@@ -19,10 +19,10 @@ public class UsuarioDao {
     @Column(name = "id_usuario", updatable = false)
     private long idUsuario;
 
-    @Column(name = "nombre_completo_usuario", length = 100)
+    @Column(name = "nombre_completo_usuario", length = 50)
     private String nombreCompletoUsuario;
     
-    @Column(name = "correo_usuario", length = 100, unique = true)
+    @Column(name = "correo_usuario", length = 50, unique = true)
     private String correoUsuario;
 
     @Column(name = "telefono_usuario")
@@ -37,15 +37,14 @@ public class UsuarioDao {
     @Column(name = "es_admin")
     private String esAdmin;
 
-    @Column(name = "es_premium", unique = true, length = 5)
+    @Column(name = "es_premium", length = 5)
     private String esPremium;
     
     //Constructores
     
-    public UsuarioDao(long idUsuario, String nombreCompletoUsuario, String correoUsuario, String telefonoUsuario,
+    public UsuarioDao(String nombreCompletoUsuario, String correoUsuario, String telefonoUsuario,
 			byte[] fotoUsuario, String contraseniaUsuario, String esAdmin, String esPremium) {
 		super();
-		this.idUsuario = idUsuario;
 		this.nombreCompletoUsuario = nombreCompletoUsuario;
 		this.correoUsuario = correoUsuario;
 		this.telefonoUsuario = telefonoUsuario;

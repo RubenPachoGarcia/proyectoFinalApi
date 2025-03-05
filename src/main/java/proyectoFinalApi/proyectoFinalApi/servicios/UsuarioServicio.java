@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -32,12 +33,20 @@ public class UsuarioServicio {
 	public UsuarioServicio(UsuarioRepositorio usuarioRepositorio) {
 		this.usuarioRepositorio = usuarioRepositorio;
 	}
+	
+	public List<UsuarioDao> obtenerTodosLosUsuarios() {
+        return usuarioRepositorio.findAll();
+    }
 
+    public UsuarioDao obtenerUsuarioPorEmail(String correoUsuario) {
+        return usuarioRepositorio.findByCorreoUsuario(correoUsuario);
+    }
+	
+	@Autowired
+    private PasswordEncoder encriptacion;
+	
 	@Autowired
 	private UsuarioRepositorio usuarioRepositorio;
-
-	@Autowired
-	private final PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private JavaMailSender mailSender;
@@ -237,6 +246,17 @@ public class UsuarioServicio {
     
     public UsuarioDao obtenerUsuarioPorCorreo(String correoUsuario) {
         return usuarioRepositorio.findByCorreoUsuario(correoUsuario);
+    }
+    
+    public boolean eliminarUsuario(Long idUsuario) {
+        if (usuarioRepositorio.existsById(idUsuario)) {
+            usuarioRepositorio.deleteById(idUsuario);
+            System.out.println("Usuario con ID " + idUsuario + " eliminado correctamente.");
+            return true;
+        } else {
+            System.err.println("Usuario con ID " + idUsuario + " no encontrado.");
+            return false;
+        }
     }
 }
 

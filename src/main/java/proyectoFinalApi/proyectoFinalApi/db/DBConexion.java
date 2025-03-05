@@ -7,10 +7,10 @@ import java.sql.SQLException;
 public class DBConexion {
     public static Connection getConnection() throws SQLException {
         try {
-            String url = "jdbc:postgresql://localhost:1045/proyectoFinal"; 
-            String usuario = "postgres";
-            String contrasenia = "sevillista04";
-            return DriverManager.getConnection(url, usuario, contrasenia);
+            String urlDB = "jdbc:postgresql://localhost:1045/proyectoFinal"; 
+            String usuarioDB = "postgres";
+            String contraseniaDB = "sevillista04";
+            return DriverManager.getConnection(urlDB, usuarioDB, contraseniaDB);
         } catch (SQLException e) {
             throw new SQLException("No se pudo conectar a la bbdd.", e);
         }

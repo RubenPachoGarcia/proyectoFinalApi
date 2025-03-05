@@ -20,7 +20,7 @@ public class NoticiaDao {
 	@Column(name = "id_noticia", updatable = false)
 	private long idNoticia;
 
-	@Column(name = "titular_noticia", length = 100)
+	@Column(name = "titular_noticia", length = 50)
 	private String titularNoticia;
 
 	@Column(name = "foto_noticia", columnDefinition = "bytea")

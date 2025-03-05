@@ -14,8 +14,7 @@ public interface UsuarioRepositorio extends JpaRepository<UsuarioDao, Long> {
     /**
      * Busca al usuario por su correo.
      */
-    UsuarioDao findByCorreoUsuario(String correoUsuario);
-
+	UsuarioDao findByCorreoUsuario(String correoUsuario);
     /**
      * Verifica si un usuario ya existe en la bbdd segun el correo.
      */
