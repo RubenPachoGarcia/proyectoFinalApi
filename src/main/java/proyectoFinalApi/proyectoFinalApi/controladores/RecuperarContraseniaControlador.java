@@ -42,7 +42,7 @@ public class RecuperarContraseniaControlador {
      */
     @PostMapping("/cambiar")
     public ResponseEntity<String> cambiarContrasenia(@RequestParam String token, @RequestParam String nuevaContrasenia) {
-        String urlLogin = "http://localhost:1180/proyectoFinalFront/login.jsp";
+        String urlLogin = "http://localhost:8080/proyectoFinalFront/login.jsp";
         boolean cambiado = usuarioServicio.cambiarContrasenia(token, nuevaContrasenia);
         return cambiado 
             ? ResponseEntity.ok("Contraseña cambiada correctamente." + "<p><a href= '" + urlLogin + "'>Login</a></p>")

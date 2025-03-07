@@ -132,7 +132,7 @@ public class UsuarioServicio {
         String token = UUID.randomUUID().toString();
         tokens.put(token, correoUsuario);
 
-        String urlCorreoRecuperacion = "http://localhost:1180/proyectoFinalFront/recuperarContrasenia.jsp?token=" + token;
+        String urlCorreoRecuperacion = "http://localhost:8080/proyectoFinalFront/recuperarContrasenia.jsp?token=" + token;
         String mensaje = "<p>Haga clic en el siguiente enlace para cambiar su contraseña:</p>"
                 + "<p><a href='" + urlCorreoRecuperacion + "'>Restablecer contraseña</a></p>"
                 + "<p>Si no solicitó este cambio, ignore este mensaje.</p>";
