@@ -15,7 +15,7 @@ import proyectoFinalApi.proyectoFinalApi.servicios.NoticiaServicio;
 /**
  * Controlador para la gestión de noticias.
  */
-@CrossOrigin(origins = "http://localhost:1180", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:8080", allowCredentials = "true")
 @RestController
 @SessionAttributes("idUsuario")  
 @RequestMapping("/api/noticias")
