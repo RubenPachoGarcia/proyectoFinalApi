@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import proyectoFinalApi.proyectoFinalApi.dtos.RegistroUsuarioDto;
 import proyectoFinalApi.proyectoFinalApi.servicios.UsuarioServicio;
 
+/**
+ * Controlador para el registro de nuevos usuarios.
+ */
 @RestController
 @RequestMapping("/api/registro")
 public class RegistroUsuarioControlador {
@@ -17,6 +20,12 @@ public class RegistroUsuarioControlador {
     @Autowired
     private UsuarioServicio usuarioServicio;
 
+    /**
+     * Registra un nuevo usuario en el sistema.
+     * 
+     * @param usuarioDto DTO con los datos del usuario.
+     * @return Respuesta indicando el estado del registro.
+     */
     @PostMapping("/usuario")
     public ResponseEntity<String> registroUsuario(@RequestBody RegistroUsuarioDto usuarioDto) {
         try {

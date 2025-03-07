@@ -1,7 +1,6 @@
 package proyectoFinalApi.proyectoFinalApi.daos;
 
 import java.util.Arrays;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,12 +8,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/** Clase entidad que representa una noticia */
 @Entity
 @Table(name = "noticias", schema = "proyecto")
 public class NoticiaDao {
 
-	// Atributos
-
+	/** Atributos de la noticia*/
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_noticia", updatable = false)
@@ -32,6 +31,7 @@ public class NoticiaDao {
 	@Column(name = "id_usuario_noticia", length = 20)
 	private long idUsuarioNoticia;
 
+	/** Constructor con los campos de la noticia*/	
 	public NoticiaDao(long idNoticia, String titularNoticia, byte[] fotoNoticia, String categoriaNoticia,
 			long idUsuarioNoticia) {
 		super();
@@ -41,11 +41,15 @@ public class NoticiaDao {
 		this.categoriaNoticia = categoriaNoticia;
 		this.idUsuarioNoticia = idUsuarioNoticia;
 	}
-
+	
+	/** Constructor vacio */
 	public NoticiaDao() {
 		super();
 	}
 
+	/** Getters y setters
+	 * Get-lectura
+	 * Set-escritura */
 	public long getIdNoticia() {
 		return idNoticia;
 	}
@@ -86,6 +90,7 @@ public class NoticiaDao {
 		this.idUsuarioNoticia = idUsuarioNoticia;
 	}
 
+	/** Metodo toString */	
 	@Override
 	public String toString() {
 		return "NoticiaDao [idNoticia=" + idNoticia + ", titularNoticia=" + titularNoticia + ", fotoNoticia="

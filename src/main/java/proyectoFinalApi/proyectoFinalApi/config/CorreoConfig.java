@@ -6,9 +6,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+/**
+ * Configuración para el envío de correos electrónicos.
+ * Esta clase define el bean {@link JavaMailSender} utilizado para enviar correos a través de SMTP.
+ */
 @Configuration
 public class CorreoConfig {
 
+    /**
+     * Crea y configura un bean de {@link JavaMailSender} para el envío de correos electrónicos.
+     */
     @Bean
     public JavaMailSender mailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();

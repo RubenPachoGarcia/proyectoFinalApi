@@ -8,12 +8,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/** Clase entidad que representa un usuario */
 @Entity
 @Table(name = "usuarios", schema = "proyecto")
 public class UsuarioDao {
 	
-	//Atributos
-	
+	/** Atributos del usuario*/
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario", updatable = false)
@@ -40,8 +40,7 @@ public class UsuarioDao {
     @Column(name = "es_premium", length = 5)
     private String esPremium;
     
-    //Constructores
-    
+    /** Constructor con los campos del usuario*/ 
     public UsuarioDao(String nombreCompletoUsuario, String correoUsuario, String telefonoUsuario,
 			byte[] fotoUsuario, String contraseniaUsuario, String esAdmin, String esPremium) {
 		super();
@@ -54,12 +53,14 @@ public class UsuarioDao {
 		this.esPremium = esPremium;
 	}
 
+    /** Constructor vacio */
 	public UsuarioDao() {
     	
     }
     
-    //Getters y Setters
-	
+	/** Getters y setters
+	 * Get-lectura
+	 * Set-escritura */
 	public long getIdUsuario() {
 		return idUsuario;
 	}
@@ -124,8 +125,7 @@ public class UsuarioDao {
 		this.esPremium = esPremium;
 	}
 	
-    //Metodo ToString
-	
+	/** Metodo toString */
 	@Override
 	public String toString() {
 		return "UsuarioDao [idUsuario=" + idUsuario + ", nombreCompletoUsuario=" + nombreCompletoUsuario

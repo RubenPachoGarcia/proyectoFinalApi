@@ -1,5 +1,6 @@
 package proyectoFinalApi.proyectoFinalApi.controladores;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +15,24 @@ import proyectoFinalApi.proyectoFinalApi.daos.UsuarioDao;
 import proyectoFinalApi.proyectoFinalApi.dtos.LoginUsuarioDto;
 import proyectoFinalApi.proyectoFinalApi.servicios.UsuarioServicio;
 
+/**
+ * Controlador para la autenticación de usuarios.
+ * Maneja el inicio de sesión y la obtención del id del usuario.
+ */
 @RestController
 @RequestMapping("/api/login")
 public class LoginUsuarioControlador {
 
     @Autowired
     private UsuarioServicio usuarioServicio;
-   
+
+    /**
+     * Autentica a un usuario verificando su correo y contraseña.
+     * Almacena en la sesión si es admin y su id.
+     * @param usuarioDto Datos de acceso del usuario.
+     * @param session    Sesión HTTP donde se almacenan datos de usuario.
+     * @return ResponseEntity con mensaje de éxito o error.
+     */
     @PostMapping("/usuario")
     public ResponseEntity<String> autenticarUsuario(@RequestBody LoginUsuarioDto usuarioDto, HttpSession session) {
         try {
@@ -36,22 +48,19 @@ public class LoginUsuarioControlador {
             String esAdmin = resultado.getBody().trim();
             session.setAttribute("esAdmin", esAdmin.equals("true") ? "true" : "false");
 
-            // Verificamos si realmente obtenemos un usuario de la base de datos
-            UsuarioDao usuarioDao = usuarioServicio.obtenerUsuarioPorCorreo(usuarioDto.getCorreoUsuario());
+            Optional<UsuarioDao> usuarioDao = usuarioServicio.obtenerUsuarioPorCorreo(usuarioDto.getCorreoUsuario());
 
-            if (usuarioDao == null) {
+            if (!usuarioDao.isPresent()) {
                 System.out.println(" X ERROR: No se encontró el usuario en la bbdd.");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
             }
 
-            // Verificamos si el ID del usuario es null
-            Long idUsuario = usuarioDao.getIdUsuario();
+            Long idUsuario = usuarioDao.get().getIdUsuario();
             if (idUsuario == null) {
                 System.out.println(" X ERROR: El id del usuario es null. Revisa la bbdd.");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener el id del usuario.");
             }
 
-            // Guardamos el ID en la sesión y verificamos que se almacene
             session.setAttribute("idUsuario", idUsuario);
             System.out.println(" El id del usuario se ha guardado en la sesión: " + session.getAttribute("idUsuario"));
 
@@ -61,15 +70,20 @@ public class LoginUsuarioControlador {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor.");
         }
     }
-    
- // Endpoint para obtener el id del usuario dado correo y contraseña
+
+    /**
+     * Obtiene el ID del usuario según su correo y contraseña.
+     * @param correoUsuario     Correo del usuario.
+     * @param contraseniaUsuario Contraseña del usuario.
+     * @return ResponseEntity con el id del usuario.
+     */
     @GetMapping("/id")
     public ResponseEntity<String> obtenerIdUsuario(@RequestParam("correoUsuario") String correoUsuario,
-                                                    @RequestParam("contraseniaUsuario") String contraseniaUsuario) {
+                                                   @RequestParam("contraseniaUsuario") String contraseniaUsuario) {
         try {
-            UsuarioDao usuario = usuarioServicio.obtenerUsuarioPorCorreo(correoUsuario);
-            if (usuario != null) {
-                return ResponseEntity.ok(String.valueOf(usuario.getIdUsuario()));
+            Optional<UsuarioDao> usuario = usuarioServicio.obtenerUsuarioPorCorreo(correoUsuario);
+            if (usuario.isPresent()) {
+                return ResponseEntity.ok(String.valueOf(usuario.get().getIdUsuario()));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("0");
             }
@@ -78,5 +92,4 @@ public class LoginUsuarioControlador {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
         }
     }
-
 }

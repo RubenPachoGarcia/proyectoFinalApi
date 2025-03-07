@@ -8,10 +8,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Clase que activa la seguridad de toda la aplicacion
+ */
 @Configuration
-@EnableWebSecurity  // Activa la seguridad web para la aplicación
+@EnableWebSecurity  
 public class SeguridadConfig {
 	
+	/**
+	 * Metodo de encriptacion de datos
+	 */
 	@Bean
     public PasswordEncoder encriptacion() {
         return new BCryptPasswordEncoder();
