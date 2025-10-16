@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import proyectoFinalApi.proyectoFinalApi.dtos.VerificarExistenciaDto;
 import proyectoFinalApi.proyectoFinalApi.servicios.UsuarioServicio;
 
-//Permite hacer peticiones desde el frontend
+/**
+ * Controlador para verificar la existencia de correos y teléfonos en la base de datos.
+ */
 @CrossOrigin(origins = "http://localhost:1180")
 @RestController
 @RequestMapping("/api/verificar")
@@ -21,6 +23,12 @@ public class VerificarExistenciaControlador {
     @Autowired
     private UsuarioServicio usuarioServicio;
 
+    /**
+     * Verifica si un correo ya está registrado en la base de datos.
+     * 
+     * @param dto DTO con el correo del usuario a verificar.
+     * @return Un map con la clave "existe" y un valor booleano indicando si el correo existe.
+     */
     @PostMapping("/correo")
     public ResponseEntity<Map<String, Boolean>> verificarCorreo(@RequestBody VerificarExistenciaDto dto) {
         try {
@@ -33,6 +41,12 @@ public class VerificarExistenciaControlador {
         }
     }
 
+    /**
+     * Verifica si un número de teléfono ya está registrado en la base de datos.
+     * 
+     * @param dto DTO con el teléfono del usuario a verificar.
+     * @return Un map con la clave "existe" y un valor booleano indicando si el teléfono existe.
+     */
     @PostMapping("/telefono")
     public ResponseEntity<Map<String, Boolean>> verificarTelefono(@RequestBody VerificarExistenciaDto dto) {
         try {

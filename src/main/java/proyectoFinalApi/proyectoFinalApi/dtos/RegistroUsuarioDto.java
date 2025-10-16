@@ -1,11 +1,11 @@
 package proyectoFinalApi.proyectoFinalApi.dtos;
 
 /**
- * Clase para comunicar datos entre la API y la capa de servicios RPG-16012025
+ * Clase que representa los datos del registro de usuario.
  */
 public class RegistroUsuarioDto {
     
-	//Atributos
+	/** Atributos del registro de usuario*/
 	private long idUsuario;
     private String nombreCompletoUsuario;
     private String correoUsuario;
@@ -16,7 +16,9 @@ public class RegistroUsuarioDto {
     private String esPremium;
     private String esAdmin;
 
-    // Getters y Setters
+    /** Getters y setters
+	 * Get-lectura
+	 * Set-escritura */
     public long getIdUsuario() {
         return idUsuario;
     }

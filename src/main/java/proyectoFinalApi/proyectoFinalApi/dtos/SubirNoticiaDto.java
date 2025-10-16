@@ -1,15 +1,20 @@
 package proyectoFinalApi.proyectoFinalApi.dtos;
 
+/**
+ * Clase que representa los datos del registro de noticia.
+ */
 public class SubirNoticiaDto {
 
-	// Atributos
+	/** Atributos del registro de noticia*/
 	private long idNoticia;
 	private String titularNoticia;
 	private byte[] fotoNoticia;
 	private String categoriaNoticia;
 	private long idUsuarioNoticia;
 
-	// Getters y Setters
+	/** Getters y setters
+	 * Get-lectura
+	 * Set-escritura */
 	public long getIdNoticia() {
 		return idNoticia;
 	}

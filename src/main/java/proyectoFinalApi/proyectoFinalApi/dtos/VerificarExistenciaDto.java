@@ -1,12 +1,17 @@
 package proyectoFinalApi.proyectoFinalApi.dtos;
 
+/**
+ * Clase que representa los datos del verificar la existencia de correo y telefono en la base de datos.
+ */
 public class VerificarExistenciaDto {
-    
-	//Atributos
+   
+	/** Atributos para verificar la existencia de correo y telefono en la base de datos*/
 	private String correoUsuario;
     private String telefonoUsuario;
 
-    // Getters y Setters
+    /** Getters y setters
+	 * Get-lectura
+	 * Set-escritura */
     public String getCorreoUsuario() {
         return correoUsuario;
     }

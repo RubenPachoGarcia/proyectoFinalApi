@@ -4,17 +4,18 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * Clase principal para la aplicación.
- * Arranca la aplicación SpringBoot.
+ * Clase principal de la aplicación
+ * Esta clase contiene el método main que inicia la aplicación Spring Boot.
+ * @author 
  */
 @SpringBootApplication
 public class ProyectoFinalApiApplication {
 
-	/**
-     * Método principal de la aplicación.
-     * Se inicia la ejecucion utilizando Spring Boot.
+    /**
+     * Método principal que arranca la aplicación.
+     * @param args argumentos de línea de comandos
      */
-	public static void main(String[] args) {
-		SpringApplication.run(ProyectoFinalApiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ProyectoFinalApiApplication.class, args);
+    }
 }
